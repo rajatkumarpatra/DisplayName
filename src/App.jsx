@@ -17,27 +17,26 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault()
 
-    const first = firstName.trim()
-    const last = lastName.trim()
-
-    clearCustomValidity()
+    const first = (firstInputRef.current?.value ?? '').trim()
+    const last = (lastInputRef.current?.value ?? '').trim()
 
     if (!first) {
+      clearCustomValidity()
       firstInputRef.current?.setCustomValidity('Please fill out this field.')
       firstInputRef.current?.reportValidity()
-      clearCustomValidity()
       setFullName('')
       return
     }
 
     if (!last) {
+      clearCustomValidity()
       lastInputRef.current?.setCustomValidity('Please fill out this field.')
       lastInputRef.current?.reportValidity()
-      clearCustomValidity()
       setFullName('')
       return
     }
 
+    clearCustomValidity()
     setFullName(`${first} ${last}`)
   }
 
@@ -46,7 +45,7 @@ function App() {
       <div className="card">
         <h1>Enter your name</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form id="name-form" noValidate onSubmit={handleSubmit}>
           <label htmlFor="first-name">First name</label>
           <input
             ref={firstInputRef}
@@ -84,18 +83,14 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        <div
-          className={
-            fullName ? 'output output--visible' : 'output output--empty'
-          }
-          role="status"
-          aria-live="polite"
-        >
-          {!!fullName && <div className="output-label">Full name</div>}
-          <div id="full-name" className={fullName ? 'output-name' : undefined}>
-            {fullName}
+        {fullName ? (
+          <div className="output" role="status" aria-live="polite">
+            <div className="output-label">Full name</div>
+            <div id="full-name" className="output-name">
+              {fullName}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   )
