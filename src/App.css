@@ -85,25 +85,15 @@
   text-align: center;
 }
 
-.output--pending {
-  visibility: hidden;
-  height: 0;
-  margin-top: 0;
-  padding: 0;
-  overflow: hidden;
-  border: none;
-  background: transparent;
+.full-name-display-heading {
+  margin: 1.25rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: #334155;
 }
 
-.output-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #166534;
-  margin-bottom: 0.35rem;
-}
-
-.output-name {
+.output #full-name {
   font-size: 1.25rem;
   font-weight: 600;
   color: #14532d;
