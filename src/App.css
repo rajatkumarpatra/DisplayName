@@ -85,6 +85,16 @@
   text-align: center;
 }
 
+.output--pending {
+  visibility: hidden;
+  height: 0;
+  margin-top: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+}
+
 .output-label {
   font-size: 0.75rem;
   text-transform: uppercase;

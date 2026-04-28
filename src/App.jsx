@@ -17,8 +17,14 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault()
 
-    const first = (firstInputRef.current?.value ?? '').trim()
-    const last = (lastInputRef.current?.value ?? '').trim()
+    const form = event.currentTarget
+    const fd = new FormData(form)
+    const first = String(
+      firstInputRef.current?.value ?? fd.get('firstName') ?? firstName,
+    ).trim()
+    const last = String(
+      lastInputRef.current?.value ?? fd.get('lastName') ?? lastName,
+    ).trim()
 
     if (!first) {
       clearCustomValidity()
@@ -41,7 +47,7 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <main className="app">
       <div className="card">
         <h1>Enter your name</h1>
 
@@ -83,16 +89,19 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        {fullName ? (
-          <div className="output" role="status" aria-live="polite">
-            <div className="output-label">Full name</div>
-            <div id="full-name" className="output-name">
-              {fullName}
-            </div>
+        <div
+          className={fullName ? 'output' : 'output output--pending'}
+          role={fullName ? 'status' : undefined}
+          aria-live={fullName ? 'polite' : undefined}
+          aria-hidden={fullName ? undefined : 'true'}
+        >
+          {!!fullName && <div className="output-label">Full name</div>}
+          <div id="full-name" className="output-name">
+            {fullName}
           </div>
-        ) : null}
+        </div>
       </div>
-    </div>
+    </main>
   )
 }
 
