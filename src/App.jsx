@@ -2,13 +2,12 @@ import { useRef, useState } from 'react'
 import './App.css'
 
 function App() {
-  const formRef = useRef(null)
   const firstInputRef = useRef(null)
   const lastInputRef = useRef(null)
 
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [fullName, setFullName] = useState(null)
+  const [fullName, setFullName] = useState('')
 
   function clearCustomValidity() {
     firstInputRef.current?.setCustomValidity('')
@@ -21,26 +20,24 @@ function App() {
     const first = firstName.trim()
     const last = lastName.trim()
 
-    if (firstInputRef.current) {
-      firstInputRef.current.setCustomValidity(
-        first ? '' : 'Please fill out this field.',
-      )
-    }
-    if (lastInputRef.current) {
-      lastInputRef.current.setCustomValidity(
-        last ? '' : 'Please fill out this field.',
-      )
-    }
+    clearCustomValidity()
 
-    const form = formRef.current
-    if (!form || !form.checkValidity()) {
-      form?.reportValidity()
+    if (!first) {
+      firstInputRef.current?.setCustomValidity('Please fill out this field.')
+      firstInputRef.current?.reportValidity()
       clearCustomValidity()
-      setFullName(null)
+      setFullName('')
       return
     }
 
-    clearCustomValidity()
+    if (!last) {
+      lastInputRef.current?.setCustomValidity('Please fill out this field.')
+      lastInputRef.current?.reportValidity()
+      clearCustomValidity()
+      setFullName('')
+      return
+    }
+
     setFullName(`${first} ${last}`)
   }
 
@@ -49,7 +46,7 @@ function App() {
       <div className="card">
         <h1>Enter your name</h1>
 
-        <form ref={formRef} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="first-name">First name</label>
           <input
             ref={firstInputRef}
@@ -61,7 +58,7 @@ function App() {
             value={firstName}
             onChange={(e) => {
               setFirstName(e.target.value)
-              setFullName(null)
+              setFullName('')
               firstInputRef.current?.setCustomValidity('')
             }}
             required
@@ -78,7 +75,7 @@ function App() {
             value={lastName}
             onChange={(e) => {
               setLastName(e.target.value)
-              setFullName(null)
+              setFullName('')
               lastInputRef.current?.setCustomValidity('')
             }}
             required
@@ -87,12 +84,18 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        {fullName != null && (
-          <div className="output visible" role="status" aria-live="polite">
-            <div className="output-label">Full name</div>
-            <div className="output-name">{fullName}</div>
+        <div
+          className={
+            fullName ? 'output output--visible' : 'output output--empty'
+          }
+          role="status"
+          aria-live="polite"
+        >
+          {!!fullName && <div className="output-label">Full name</div>}
+          <div id="full-name" className={fullName ? 'output-name' : undefined}>
+            {fullName}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )
