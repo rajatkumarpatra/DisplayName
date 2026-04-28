@@ -1,49 +1,24 @@
-import { useRef, useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const firstInputRef = useRef(null)
-  const lastInputRef = useRef(null)
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [fullName, setFullName] = useState('')
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  function clearCustomValidity() {
-    firstInputRef.current?.setCustomValidity('')
-    lastInputRef.current?.setCustomValidity('')
-  }
+    const first = firstName.trim();
+    const last = lastName.trim();
 
-  function handleSubmit(event) {
-    event.preventDefault()
-
-    const form = event.currentTarget
-    const fd = new FormData(form)
-    const first = String(
-      firstInputRef.current?.value ?? fd.get('firstName') ?? firstName,
-    ).trim()
-    const last = String(
-      lastInputRef.current?.value ?? fd.get('lastName') ?? lastName,
-    ).trim()
-
-    if (!first) {
-      clearCustomValidity()
-      firstInputRef.current?.setCustomValidity('Please fill out this field.')
-      firstInputRef.current?.reportValidity()
-      setFullName('')
-      return
+    // validation
+    if (!first || !last) {
+      setFullName("");
+      return;
     }
 
-    if (!last) {
-      clearCustomValidity()
-      lastInputRef.current?.setCustomValidity('Please fill out this field.')
-      lastInputRef.current?.reportValidity()
-      setFullName('')
-      return
-    }
-
-    clearCustomValidity()
-    setFullName(`${first} ${last}`)
+    setFullName(`${first} ${last}`);
   }
 
   return (
@@ -51,58 +26,39 @@ function App() {
       <div className="card">
         <h1>Enter your name</h1>
 
-        <form id="name-form" noValidate onSubmit={handleSubmit}>
-          <label htmlFor="first-name">First name</label>
+        <form onSubmit={handleSubmit}>
+          <label>First name</label>
           <input
-            ref={firstInputRef}
-            id="first-name"
-            name="firstName"
             type="text"
-            placeholder="First name"
-            autoComplete="given-name"
             value={firstName}
             onChange={(e) => {
-              setFirstName(e.target.value)
-              setFullName('')
-              firstInputRef.current?.setCustomValidity('')
+              setFirstName(e.target.value);
+              setFullName("");
             }}
-            required
           />
 
-          <label htmlFor="last-name">Last name</label>
+          <label>Last name</label>
           <input
-            ref={lastInputRef}
-            id="last-name"
-            name="lastName"
             type="text"
-            placeholder="Last name"
-            autoComplete="family-name"
             value={lastName}
             onChange={(e) => {
-              setLastName(e.target.value)
-              setFullName('')
-              lastInputRef.current?.setCustomValidity('')
+              setLastName(e.target.value);
+              setFullName("");
             }}
-            required
           />
 
           <button type="submit">Submit</button>
         </form>
 
-        <div
-          className={fullName ? 'output' : 'output output--pending'}
-          role={fullName ? 'status' : undefined}
-          aria-live={fullName ? 'polite' : undefined}
-          aria-hidden={fullName ? undefined : 'true'}
-        >
-          {!!fullName && <div className="output-label">Full name</div>}
-          <div id="full-name" className="output-name">
-            {fullName}
+        {/* Render only when valid */}
+        {fullName && (
+          <div className="output">
+            <p>{fullName}</p>
           </div>
-        </div>
+        )}
       </div>
     </main>
-  )
+  );
 }
 
-export default App
+export default App;
