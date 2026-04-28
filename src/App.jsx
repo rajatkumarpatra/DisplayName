@@ -1,104 +1,65 @@
-import { useRef, useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const firstInputRef = useRef(null)
-  const lastInputRef = useRef(null)
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [fullNameLine, setFullNameLine] = useState('')
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  function clearCustomValidity() {
-    firstInputRef.current?.setCustomValidity('')
-    lastInputRef.current?.setCustomValidity('')
-  }
+    const first = firstName.trim();
+    const last = lastName.trim();
 
-  function handleSubmit(event) {
-    event.preventDefault()
-
-    const form = event.currentTarget
-    const fd = new FormData(form)
-    const first = String(
-      firstInputRef.current?.value ?? fd.get('firstName') ?? firstName,
-    ).trim()
-    const last = String(
-      lastInputRef.current?.value ?? fd.get('lastName') ?? lastName,
-    ).trim()
-
-    if (!first) {
-      clearCustomValidity()
-      firstInputRef.current?.setCustomValidity('Please fill out this field.')
-      firstInputRef.current?.reportValidity()
-      setFullNameLine('')
-      return
+    if (!first || !last) {
+      setFullName("");
+      return;
     }
 
-    if (!last) {
-      clearCustomValidity()
-      lastInputRef.current?.setCustomValidity('Please fill out this field.')
-      lastInputRef.current?.reportValidity()
-      setFullNameLine('')
-      return
-    }
-
-    clearCustomValidity()
-    setFullNameLine(`Full Name: ${first} ${last}`)
+    setFullName(`${first} ${last}`);
   }
 
   return (
-    <main className="app">
-      <div className="card">
-        <h1>Enter your name</h1>
+    <div>
+      <h1>Enter your name</h1>
 
-        <form id="name-form" noValidate onSubmit={handleSubmit}>
-          <label htmlFor="first-name">First name</label>
-          <input
-            ref={firstInputRef}
-            id="first-name"
-            name="firstName"
-            type="text"
-            placeholder="First name"
-            autoComplete="given-name"
-            value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value)
-              setFullNameLine('')
-              firstInputRef.current?.setCustomValidity('')
-            }}
-            required
-          />
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="first-name">First Name</label>
+        <input
+          id="first-name"
+          name="firstName"
+          type="text"
+          value={firstName}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+            setFullName("");
+          }}
+        />
 
-          <label htmlFor="last-name">Last name</label>
-          <input
-            ref={lastInputRef}
-            id="last-name"
-            name="lastName"
-            type="text"
-            placeholder="Last name"
-            autoComplete="family-name"
-            value={lastName}
-            onChange={(e) => {
-              setLastName(e.target.value)
-              setFullNameLine('')
-              lastInputRef.current?.setCustomValidity('')
-            }}
-            required
-          />
+        <label htmlFor="last-name">Last Name</label>
+        <input
+          id="last-name"
+          name="lastName"
+          type="text"
+          value={lastName}
+          onChange={(e) => {
+            setLastName(e.target.value);
+            setFullName("");
+          }}
+        />
 
-          <button type="submit">Submit</button>
-        </form>
+        <button type="submit">Submit</button>
+      </form>
 
-        <h2 className="full-name-display-heading">Full Name Display</h2>
-
-        {fullNameLine ? (
-          <div className="output">
-            <div id="full-name">{fullNameLine}</div>
-          </div>
-        ) : null}
-      </div>
-    </main>
-  )
+      {/* IMPORTANT: render ONLY when valid */}
+      {fullName && (
+        <h2 className="full-name-display-heading">
+          Full Name: {fullName}
+        </h2>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
