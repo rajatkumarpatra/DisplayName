@@ -25,7 +25,7 @@ function App() {
       <div className="card">
         <h1>Enter your name</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form id="name-form" onSubmit={handleSubmit}>
           <label htmlFor="first-name">First name</label>
           <input
             id="first-name"
@@ -53,9 +53,15 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        {/* Always present for test compatibility */}
-        <div className="output">
-          <div id="full-name">{fullName}</div>
+        {/* IMPORTANT: keep structure EXACT like original */}
+        <div
+          className={fullName ? "output" : "output output--pending"}
+        >
+          {fullName && <div className="output-label">Full name</div>}
+          
+          <div id="full-name" className="output-name">
+            {fullName}
+          </div>
         </div>
       </div>
     </main>
