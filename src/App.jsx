@@ -12,7 +12,6 @@ function App() {
     const first = firstName.trim();
     const last = lastName.trim();
 
-    // validation
     if (!first || !last) {
       setFullName("");
       return;
@@ -27,8 +26,10 @@ function App() {
         <h1>Enter your name</h1>
 
         <form onSubmit={handleSubmit}>
-          <label>First name</label>
+          <label htmlFor="first-name">First name</label>
           <input
+            id="first-name"
+            name="firstName"
             type="text"
             value={firstName}
             onChange={(e) => {
@@ -37,8 +38,10 @@ function App() {
             }}
           />
 
-          <label>Last name</label>
+          <label htmlFor="last-name">Last name</label>
           <input
+            id="last-name"
+            name="lastName"
             type="text"
             value={lastName}
             onChange={(e) => {
@@ -50,12 +53,10 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        {/* Render only when valid */}
-        {fullName && (
-          <div className="output">
-            <p>{fullName}</p>
-          </div>
-        )}
+        {/* Always present for test compatibility */}
+        <div className="output">
+          <div id="full-name">{fullName}</div>
+        </div>
       </div>
     </main>
   );
